@@ -1,0 +1,10 @@
+:root {
+    --color1: #6D2E46;
+    --color2: #A26769;
+    --color3: #D5B9B2;
+    --color4: #ECE2D0;
+    --color5: #CEBEBE;
+    --color6: #8B5557;
+
+    background-color: var(--color1);
+}
