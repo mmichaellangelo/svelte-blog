@@ -58,6 +58,7 @@
         display: flex;
         width: 100%;
         background-color: var(--color3);
+        border: 2px solid var(--color6);
         padding: 0.5rem;
         margin-top: 0.25rem;
         margin-bottom: 0.5rem;
@@ -66,6 +67,7 @@
     }
 
     input:focus, textarea:focus {
+        outline: none;
         background-color: var(--color4);
     }
 
@@ -84,5 +86,11 @@
     button {
         background-color: var(--color3);
         padding: 0.5rem;
+        border: 2px solid var(--color6);
+    }
+
+    button:focus {
+        outline: none;
+        background-color: var(--color4);
     }
 </style>
