@@ -12,6 +12,7 @@
 	"devDependencies": {
 		"@sveltejs/adapter-auto": "^2.0.0",
 		"@sveltejs/kit": "^1.20.4",
+		"@types/bcrypt": "^5.0.0",
 		"@types/node": "^20.8.2",
 		"@types/pg": "^8.10.5",
 		"@types/quill": "^2.0.12",
@@ -24,6 +25,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"bcrypt": "^5.1.1",
 		"mysql2": "^3.6.1",
 		"pg": "^8.11.3",
 		"squire-rte": "^2.2.3",
