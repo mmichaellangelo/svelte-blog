@@ -1,6 +1,7 @@
 import pool from "./db-connect.server";
-import type { Post } from "$lib/types/types";
+import type { Permission, Post, User } from "$lib/types/types";
 import type { QueryResult } from "pg";
+
 
 export class PostError extends Error {
     constructor(message: string) {
@@ -10,49 +11,59 @@ export class PostError extends Error {
 }
 
 
-export async function addPost(slug: string, title: string, body: string): Promise<Post> {
+export async function createPost(slug: string, title: string, body: string, author_id: number, tags?: string[]): Promise<Post> {
     try {
-
         let date_created = new Date().toUTCString;
 
         let res: QueryResult<Post> = await pool.query(
-            'INSERT INTO post(slug, title, body, date_created) VALUES($1, $2, $3, $4) RETURNING *', [slug, title, body, date_created]);
-        let Slug: string = res.rows[0].slug;
-        let Title: string = res.rows[0].title;
-        let Body: string = res.rows[0].body;
-        let Post_Date: Date = res.rows[0].post_date;
-        let Author: string = res.rows[0].author;
-        if ()
+            'INSERT INTO post(slug, title, body, author_id, date_created) VALUES($1, $2, $3, $4, $5) RETURNING *', [slug, title, body, author_id, date_created]);
 
-        let post: Post = {
-            slug: Slug,
-            title: Title,
-            body: Body,
-            post_date: Post_Date,
-            author: Author
-        }
+        return res.rows[0];
 
-        return post;
     } catch (error) {
-        console.log(error);
+        console.error(error);
         throw new PostError('Error adding post.');
     }
 }
 
 
-export async function getPostByID(id: number) {
-    let res = await pool.query('SELECT * FROM post WHERE id = $1', [id]);
-    return res.rows[0];
+export async function getPosts(limit: number, page: number): Promise<Post[]> {
+    let offset = page * limit;
+    try {
+        let res:QueryResult<Post> = await pool.query('SELECT * FROM post OFFSET $1 LIMIT $2', [offset, limit]);
+        return res.rows;
+    } catch (error) {
+        console.error(error);
+        throw new PostError("Error querying posts");
+    }
 }
 
-
-export async function getPostBySlug(slug: string): Promise<Post> {
+export async function getPostByID(id: number): Promise<Post> {
     try {
-        let res = await pool.query('SELECT * FROM post WHERE slug = $1', [slug]);
-        if (res.rowCount !== 1) {
-            throw new PostError('Error: post could not be found');
-        } else {
-            let post: Post = res.rows[0];
-            return post;
-        }
-    } catch
+        let res:QueryResult<Post> = await pool.query('SELECT * FROM post WHERE id = $1', [id]);
+        return res.rows[0];
+    } catch (error) {
+        console.error(error);
+        throw new PostError('Error Getting Post');
+    }
+}
+
+export async function getUserByID(id: number): Promise<User> {
+    try {
+        let res:QueryResult<User> = await pool.query('SELECT * FROM user where id = $1', [id]);
+        return res.rows[0];
+    } catch (error) {
+        console.error(error);
+        throw new PostError('Error finding user');
+    }
+}
+
+export async function createUser(username: string, password: string, permissions: Permission[]): Promise<User> {
+    try {
+        let res:QueryResult<User> = await pool.query('INSERT INTO user(username, password, permissions) VALUES($1, $2, $3)', [username, password, permissions]);
+        return res.rows[0];
+    } catch (error) {
+        console.error(error);
+        throw new PostError("Error creating user");
+    }
+}
