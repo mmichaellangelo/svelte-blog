@@ -1,15 +1,16 @@
 <script lang="ts">
-    export let title: string;
-    export let body: string;
+    import type { Post } from "$lib/types/types";
+
+    export let post: Post;
     const titleCharLimit = 30;
     const bodyCharLimit = 300;
-    $: titleTrimmed = title.slice(0, titleCharLimit);
-    $: if ( titleTrimmed.length < title.length ) { titleTrimmed = titleTrimmed.concat("..."); }
-    $: bodyTrimmed = body.slice(0, bodyCharLimit);
-    $: if ( bodyTrimmed.length < body.length ) { bodyTrimmed = bodyTrimmed.concat("..."); }
+    $: titleTrimmed = post.title.slice(0, titleCharLimit);
+    $: if ( titleTrimmed.length < post.title.length ) { titleTrimmed = titleTrimmed.concat("..."); }
+    $: bodyTrimmed = post.body.slice(0, bodyCharLimit);
+    $: if ( bodyTrimmed.length < post.body.length ) { bodyTrimmed = bodyTrimmed.concat("..."); }
 </script>
 <div class="post_container">
-    <a class="post_title" href="#">
+    <a class="post_title" href={`/post/${post.id}`}>
         <h2>{titleTrimmed}</h2>
     </a>
     <p>{bodyTrimmed}</p>

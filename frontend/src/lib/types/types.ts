@@ -12,6 +12,7 @@ export interface Post {
 export interface User {
     id: number;
     username: string;
+    email: string;
     password_hashed: string;
     permissions?: Permission[] 
 }
@@ -21,3 +22,5 @@ export enum Permission {
     CREATE = "create",
     DELETE = "delete"
 }
+
+export const DEFAULT_PERMISSIONS = [Permission.EDIT, Permission.CREATE, Permission.DELETE];

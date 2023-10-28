@@ -11,10 +11,17 @@ export class PostError extends Error {
     }
 }
 
+export class UserError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name="UserError";
+    }
+}
+
 
 export async function createPost(slug: string, title: string, body: string, author_id: number, tags?: string[]): Promise<Post> {
     try {
-        let date_created = new Date().toUTCString;
+        let date_created = new Date().toUTCString();
 
         let res: QueryResult<Post> = await pool.query(
             'INSERT INTO post(slug, title, body, author_id, date_created) VALUES($1, $2, $3, $4, $5) RETURNING *', [slug, title, body, author_id, date_created]);
@@ -29,7 +36,7 @@ export async function createPost(slug: string, title: string, body: string, auth
 
 
 export async function getPosts(limit: number, page: number): Promise<Post[]> {
-    let offset = page * limit;
+    let offset = (page - 1) * limit;
     try {
         let res:QueryResult<Post> = await pool.query('SELECT * FROM post OFFSET $1 LIMIT $2', [offset, limit]);
         return res.rows;
@@ -49,9 +56,22 @@ export async function getPostByID(id: number): Promise<Post> {
     }
 }
 
+export async function getAllSlugsInUse(): Promise<string[]> {
+    try {
+        let res = await pool.query('SELECT slug from post');
+        let slugs = [];
+        for (let i = 0; i < res.rowCount; i++) {
+            slugs[i] = res.rows[i].slug;
+        }
+        return slugs;
+    } catch (error) {
+        throw new PostError("Error: unable to get the slugs");
+    }
+}
+
 export async function getUserByID(id: number): Promise<User> {
     try {
-        let res:QueryResult<User> = await pool.query('SELECT * FROM user where id = $1', [id]);
+        let res: QueryResult<User> = await pool.query('SELECT * FROM user where id = $1', [id]);
         return res.rows[0];
     } catch (error) {
         console.error(error);
@@ -59,10 +79,20 @@ export async function getUserByID(id: number): Promise<User> {
     }
 }
 
-export async function createUser(username: string, password: string, permissions: Permission[]): Promise<User> {
-    let hashedPassword = hashPassword(password);
+export async function getUserByUsername(username: string): Promise<User> {
     try {
-        let res:QueryResult<User> = await pool.query('INSERT INTO user(username, password, permissions) VALUES($1, $2, $3)', [username, hashedPassword, permissions]);
+        let res: QueryResult<User> = await pool.query('SELECT * FROM user where username = $1', [username]);
+        return res.rows[0];
+    } catch (error) {
+        console.error(error);
+        throw new UserError('ERROR: Could not find user');
+    }
+}
+
+export async function createUser(username: string, email: string, password: string, permissions: Permission[]): Promise<User> {
+    let hashedPassword = await hashPassword(password);
+    try {
+        let res:QueryResult<User> = await pool.query('INSERT INTO "user"(username, email, password, permissions) VALUES($1, $2, $3, $4)', [username, email, hashedPassword, permissions]);
         return res.rows[0];
     } catch (error) {
         console.error(error);
