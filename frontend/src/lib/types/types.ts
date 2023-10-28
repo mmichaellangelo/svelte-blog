@@ -5,5 +5,19 @@ export interface Post {
     body: string;       // Body of the article (Markdown)
     post_date: Date;    // Original post date
     edit_date?: Date;   // Date last edited
-    author: string;     // Username of author
+    author_id: number;  // ID of author
+    tags: string[]      // tags to categorize post
+}
+
+export interface User {
+    id: number;
+    username: string;
+    password_hashed: string;
+    permissions?: Permission[] 
+}
+
+export enum Permission {
+    EDIT = "edit",
+    CREATE = "create",
+    DELETE = "delete"
 }

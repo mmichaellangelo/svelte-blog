@@ -1,6 +1,7 @@
 import pool from "./db-connect.server";
 import type { Permission, Post, User } from "$lib/types/types";
 import type { QueryResult } from "pg";
+import { hashPassword } from "./passhash.server";
 
 
 export class PostError extends Error {
@@ -59,8 +60,9 @@ export async function getUserByID(id: number): Promise<User> {
 }
 
 export async function createUser(username: string, password: string, permissions: Permission[]): Promise<User> {
+    let hashedPassword = hashPassword(password);
     try {
-        let res:QueryResult<User> = await pool.query('INSERT INTO user(username, password, permissions) VALUES($1, $2, $3)', [username, password, permissions]);
+        let res:QueryResult<User> = await pool.query('INSERT INTO user(username, password, permissions) VALUES($1, $2, $3)', [username, hashedPassword, permissions]);
         return res.rows[0];
     } catch (error) {
         console.error(error);
