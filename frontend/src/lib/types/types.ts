@@ -17,6 +17,12 @@ export interface User {
     permissions?: Permission[] 
 }
 
+export interface UserData {
+    logged_in: boolean;
+    username: string;
+    permissions?: Permission[];
+}
+
 export enum Permission {
     EDIT = "edit",
     CREATE = "create",

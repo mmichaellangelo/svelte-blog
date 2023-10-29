@@ -1,3 +1,27 @@
+<script lang="ts">
+
+
+    interface NavLink {
+        name: string;
+        link: string;
+        enabled?: boolean;
+        child?: NavLink[];
+    }
+
+    const nav: NavLink[] = [
+        {
+            name: "Home",
+            link: "/",
+            child: [{
+                name: "Hello",
+                link: "/hello"
+            }]
+        },
+    ]
+    
+</script>
+
+
 <nav>
     <a href="/">Home</a>
     <a href="#">About</a>
