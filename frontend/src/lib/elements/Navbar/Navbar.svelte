@@ -3,33 +3,81 @@
 
     interface NavLink {
         name: string;
-        link: string;
+        path: string;
         enabled?: boolean;
-        child?: NavLink[];
+        children?: NavLink[];
     }
 
     const nav: NavLink[] = [
         {
             name: "Home",
-            link: "/",
-            child: [{
-                name: "Hello",
-                link: "/hello"
-            }]
+            path: "/",
         },
+        {
+            name: "About",
+            path: "/about",
+        },
+        {
+            name: "Contact",
+            path: "/contact",
+        },
+        {
+            name: "Admin",
+            path: "/admin",
+            children: [
+                {
+                    name: "Dashboard",
+                    path: "/admin/dashboard",
+                },
+                {
+                    name: "New Post",
+                    path: "/admin/new-post"
+                },
+            ]
+        }
     ]
     
 </script>
 
 
 <nav>
-    <a href="/">Home</a>
-    <a href="#">About</a>
-    <a href="#">Posts</a>
-    <a href="/contact">Contact</a>
+    {#each nav as link}
+        {#if link.children}
+            <div class="nav-link dropdown">
+                <a href={link.path}>{link.name}</a>
+                <div class="dropdown-content">
+                    {#each link.children as child}
+                        <div class="nav-link">
+                            <a href={child.path}>{child.name}</a> <br/>
+                        </div>
+                    {/each}
+                </div>
+            </div>
+            
+        {:else}
+            <div class="nav-link">
+                <a href={link.path}>{link.name}</a>
+            </div>
+        {/if}
+    {/each}
 </nav>
 
 <style>
+
+    .dropdown {
+        /* display: block; */
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        translate: -1rem 1rem;
+    }
+
+    .dropdown:hover .dropdown-content {
+        display: block;
+        box-sizing: content-box;
+    }
 
     nav {
         background-color: var(--color6);
@@ -38,9 +86,23 @@
 
     a {
         margin: 0px;
+        margin-top: auto;
+        margin-bottom: auto;
         color: var(--color3);
         text-decoration: none;
+    }
+
+    .nav-link {
         padding: 1rem;
+        background-color: var(--color6);
+    }
+
+    .nav-link:hover {
+        background-color: var(--color2);
+    }
+
+    .nav-link:hover a {
+        text-decoration: underline;
     }
 
     a:hover {
