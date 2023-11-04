@@ -27,7 +27,7 @@
 <style>
     #contact_wrapper {
         background-color: var(--color2);
-        border: 2px solid black;
+        border-radius: 0 0 0.5rem 0.5rem;
         max-width: 26rem;
         margin-top: 1rem;
         margin-left: auto;
@@ -47,6 +47,7 @@
 
     #contact_title {
         color: var(--color4);
+        margin-top: 0.5rem;
     }
 
     label {

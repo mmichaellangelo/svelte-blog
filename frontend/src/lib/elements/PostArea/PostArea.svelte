@@ -15,7 +15,7 @@
 <style>
     #posts_container {
         padding-top: 1rem;
-        border: 2px solid black;
+        border-radius: 0 0 0.5rem 0.5rem;
         background-color: var(--color2);
         padding: 2rem;
         margin-top: 1rem;

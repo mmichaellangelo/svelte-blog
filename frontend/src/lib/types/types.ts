@@ -1,12 +1,12 @@
 export interface Post {
-    id: number,         // index, identifier
-    slug: string;       // URL Slug
-    title: string;      // Title of the article
-    body: string;       // Body of the article (Markdown)
-    post_date: Date;    // Original post date
-    edit_date?: Date;   // Date last edited
-    author_id: number;  // ID of author
-    tags: string[]      // tags to categorize post
+    id: number,           // index, identifier
+    slug: string;         // URL Slug
+    title: string;        // Title of the article
+    body: string;         // Body of the article (Markdown)
+    date_created: Date;   // Original post date
+    date_edited?: Date;   // Date last edited
+    author_id: number;    // ID of author
+    tags: string[]        // tags to categorize post
 }
 
 export interface User {

@@ -18,8 +18,8 @@ export async function GET({url}:RequestEvent) {
         try {
             const user = await getUserByID(parseInt(userID));
             return user;
-        } catch (error:UserError) {
-            
+        } catch (error) {
+            console.error(error);
         }
         
         
@@ -32,15 +32,18 @@ export async function POST(event) {
     let email = data.get('email')?.valueOf();
     let username = data.get('username')?.valueOf();
     let password = data.get('password')?.valueOf();
-    if ( email == null || username == null || password == null ) {
+    if (typeof username !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
         return new Response(JSON.stringify({ success: false }), {
             status: 400,
             headers: {
                 'Content-Type': 'application/json'
             },
         });
-    }
-    try {
-        createUser(username, email, password, DEFAULT_PERMISSIONS)
+    } else {
+        try {
+            createUser(username, email, password, DEFAULT_PERMISSIONS)
+        } catch (error) {
+            console.error(error);
+        }
     }
 }

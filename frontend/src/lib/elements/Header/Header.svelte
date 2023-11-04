@@ -38,13 +38,14 @@
 <style>
 
     #title_tagline {
+        border-radius: 0.5rem;
         padding: 0px;
         background-color: var(--color2);
         
     }
 
     #header_container {
-        border: 2px solid black;
+        border-radius: 0.5rem;
         background-color: var(--color2);
         padding: 0px;
         margin: 0px;
@@ -52,6 +53,7 @@
     }
 
     #header_top_container {
+        border-radius: 0.5rem;
         display: flex;
         align-items: center;
     }

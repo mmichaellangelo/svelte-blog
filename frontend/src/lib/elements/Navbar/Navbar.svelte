@@ -64,14 +64,11 @@
 
 <style>
 
-    .dropdown {
-        /* display: block; */
-    }
-
     .dropdown-content {
         display: none;
         position: absolute;
         translate: -1rem 1rem;
+        z-index: 5;
     }
 
     .dropdown:hover .dropdown-content {
